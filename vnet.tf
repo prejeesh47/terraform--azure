@@ -63,3 +63,30 @@ resource "azurerm_subnet_network_security_group_association" "wen-nsg-assoc" {
   subnet_id                 = azurerm_subnet.web-subnet.id
   network_security_group_id = azurerm_network_security_group.web-nsg.id
 }
+
+#public ip
+resource "azurerm_public_ip" "web-pip" {
+  name                = "web-pip"
+  resource_group_name = azurerm_resource_group.web-rg.name
+  location            = azurerm_resource_group.web-rg.location
+  allocation_method   = "Static"
+
+  tags = {
+    env = "dev"
+  }
+}
+
+#nic
+resource "azurerm_network_interface" "web-nic" {
+  name                = "web-nic"
+  location            = azurerm_resource_group.web-rg.location
+  resource_group_name = azurerm_resource_group.web-rg.name
+
+  ip_configuration {
+    name                          = "internal"
+    subnet_id                     = azurerm_subnet.web-subnet.id
+    private_ip_address_allocation = "Dynamic"
+    public_ip_address_id          = azurerm_public_ip.web-pip.id
+
+  }
+}
