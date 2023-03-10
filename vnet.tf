@@ -9,16 +9,12 @@ resource "azurerm_virtual_network" "web-vnet" {
     tier = "frontendapp"
 
   }
-  resource "azurerm_subnet" "web-subnet" {
-    name                 = "web-subnet"
-    resource_group_name  = azurerm_resource_group.web-rg.name
-    virtual_network_name = azurerm_virtual_network.web-vnet.name
-    address_prefixes     = ["10.0.1.0/24"]
+}
 
-    tags = {
-      env  = "dev"
-      tier = "frontendapp"
 
-    }
-  }
+resource "azurerm_subnet" "web-subnet" {
+  name                 = "web-subnet"
+  resource_group_name  = azurerm_resource_group.web-rg.name
+  virtual_network_name = azurerm_virtual_network.web-vnet.name
+  address_prefixes     = ["10.0.1.0/24"]
 }
